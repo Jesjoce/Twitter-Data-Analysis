@@ -35,10 +35,15 @@ class TweetDfExtractor:
 
     # an example function
     def find_statuses_count(self)->list:
-        statuses_count 
+        statuses_count = []
+        for tweets in self.tweets_list:
+            statuses_count.append(tweets['user']['statuses_count'])
         
     def find_full_text(self)->list:
-        text = 
+        text = []
+        for tweets in self.tweets_list:
+            text.append(tweets['text'])
+        return text
        
     
     def find_sentiments(self, text)->list:
@@ -46,22 +51,34 @@ class TweetDfExtractor:
         return polarity, self.subjectivity
 
     def find_created_time(self)->list:
-       
+        created_at = []
+        for tweets in self.tweets_list:
+            created_at.append(tweets['created_at'])
         return created_at
 
     def find_source(self)->list:
-        source = 
-
+        source = []
+        for tweets in self.tweets_list:
+            source.append(tweets['source'])
         return source
 
     def find_screen_name(self)->list:
-        screen_name = 
+        screen_name = ""
+        for tweets in self.tweets_list:
+            screen_name.append(tweets['user']['screen_name'])
+        return screen_name 
 
     def find_followers_count(self)->list:
-        followers_count = 
+        followers_count = []
+        for tweets in self.tweets_list:
+            followers_count.append(tweets['user']['followers_count'])
+        return followers_count
 
     def find_friends_count(self)->list:
-        friends_count = 
+        friends_count = []
+        for tweets in self.tweets_list:
+            friends_count.append(tweets['user']['friends_count'])
+        return friends_count 
 
     def is_sensitive(self)->list:
         try:
@@ -72,17 +89,29 @@ class TweetDfExtractor:
         return is_sensitive
 
     def find_favourite_count(self)->list:
+        favourite_count = []
+        for tweets in self.tweets_list:
+            favourite_count.append(tweets['user']['favourite_count'])
+        return favourite_count
         
     
     def find_retweet_count(self)->list:
-        retweet_count = 
+        retweet_count = []
+        for tweets in self.tweets_list:
+            retweet_count.append(tweets['entities']['retweet_count'])
+        return retweet_count
 
     def find_hashtags(self)->list:
-        hashtags =
+        hashtags = []
+        for tweets in self.tweets_list:
+            hashtags.append(tweets['entities']['hashtags'])
+        return hashtags
 
     def find_mentions(self)->list:
-        mentions = 
-
+        mentions = []
+        for tweets in self.tweets_list:
+            mentions.append(tweets['entities']['user_mentions'])
+        return mentions
 
     def find_location(self)->list:
         try:
