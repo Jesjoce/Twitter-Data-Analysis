@@ -23,5 +23,4 @@ deploy:
   provider: pages
   skip-cleanup: true
   github-token: $GITHUB_TOKEN
-  on:
-    repo: Jesjoce/Twitter-Data-Analysis
+
