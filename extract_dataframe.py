@@ -35,19 +35,21 @@ class TweetDfExtractor:
         
         self.tweets_list = tweets_list
 
-        
+    
+    def find_statuses_count(self)->list:
+        statuses_count = []
+        for tweets in self.tweets_list:
+            statuses_count.append(tweets['user']['statuses_count'])
+        return statuses_count
+    
+    
     def find_full_text(self)->list:
         texts = []
         for tweets in self.tweets_list:
-            if 'quoted_status' in tweets.keys() and 'extended_tweet' in tweets['quoted_status'].keys():
-                texts.append(tweets['quoted_status']['extended_tweet']['full_text'])
-
-            elif 'retweeted_status' in tweets.keys() and 'extended_tweet' in tweets['retweeted_status'].keys(): 
+            if 'retweeted_status' in tweets.keys() and 'extended_tweet' in tweets['retweeted_status'].keys(): 
                 texts.append(tweets['retweeted_status']['extended_tweet']['full_text'])
-        
             else:
-                texts.append(tweets['text'])
-                continue
+                texts.append(tweets['text'])     
                 
         return texts
     
@@ -78,7 +80,7 @@ class TweetDfExtractor:
         sentiment = []
         for tex in text:
             sentiment.append(TextBlob(tex).sentiment)   
-        return sentiment   
+        return sentiment
     
     def find_lang(self) ->list:
         lang = []
@@ -135,28 +137,38 @@ class TweetDfExtractor:
     def find_favourite_count(self)->list:
         favourite_count = []
         for tweets in self.tweets_list:
-            favourite_count.append(tweets['favorite_count'])
+            if 'retweeted_status' in tweets.keys() and 'favorite_count' in tweets['retweeted_status'].keys(): 
+                favourite_count.append(tweets['retweeted_status']['favorite_count'])
+            else:
+                favourite_count.append(tweets['favorite_count'])
+            
         return favourite_count
     
     def find_retweet_count(self)->list:
         retweet_count = []
         for tweets in self.tweets_list:
-            retweet_count.append(tweets['retweet_count'])
+            if 'retweeted_status' in tweets.keys() and 'retweet_count' in tweets['retweeted_status'].keys(): 
+                retweet_count.append(tweets['retweeted_status']['retweet_count'])
+            else:
+                retweet_count.append(tweets['retweet_count'])        
         return retweet_count
 
     def find_hashtags(self)->list:
-        hashtags = []
+        hashtags = [] 
         for tweets in self.tweets_list:
-            if len(tweets['entities']['hashtags']) == 0:
-                hashtags.append(tweets['entities']['hashtags'])
-            else:
-                hashtags.append(tweets['entities']['hashtags'][0]['text'])
+            hashtag = []
+            for element in tweets['entities']['hashtags']:
+                hashtag.append(element['text'])
+            hashtags.append(hashtag)
         return hashtags
     
     def find_mentions(self)->list:
         mentions = []
         for tweets in self.tweets_list:
-            mentions.append(tweets['entities']['user_mentions'])
+            mention = []
+            for element in tweets['entities']['user_mentions']:
+                mention.append(element['screen_name'])
+            mentions.append(mention)
         return mentions
     
     def find_location(self)->list:
@@ -208,7 +220,6 @@ class TweetDfExtractor:
             print('File Successfully Saved.!!!')
         
         return df
-
                 
 if __name__ == "__main__":
     # required column to be generated you should be creative and add more features
